@@ -271,293 +271,276 @@
 
     <!-- FIREBASE INITIALIZATION & APPLICATION LOGIC -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // IMPORTANT: Replace this config object with your own Firebase Console details.
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+    // 1. Import EmailJS browser SDK dynamically
+    import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm';
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    // IMPORTANT: Replace this config object with your own Firebase Console details.
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
 
-        // Global States
-        let currentUser = null;
-        let cart = []; 
-        let unsubscribeOrders = null;
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        // --- AUTHENTICATION FLOWS ---
+    // Global States
+    let currentUser = null;
+    let cart = []; 
+    let unsubscribeOrders = null;
 
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                showToast("Account created! Welcome to Wonderful Cake Store.", "success");
-                showSection('home-section');
-                e.target.reset();
-            } catch (error) { showToast(error.message, "error"); }
-        });
+    // --- AUTHENTICATION FLOWS ---
 
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                showToast("Logged in successfully. Happy shopping!", "success");
-                showSection('home-section');
-                e.target.reset();
-            } catch (error) { showToast(error.message, "error"); }
-        });
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            showToast("Account created! Welcome to Wonderful Cake Store.", "success");
+            showSection('home-section');
+            e.target.reset();
+        } catch (error) { showToast(error.message, "error"); }
+    });
 
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                showToast("Logged out successfully.", "success");
-                showSection('home-section');
-            } catch (error) { showToast(error.message, "error"); }
-        });
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            showToast("Logged in successfully. Happy shopping!", "success");
+            showSection('home-section');
+            e.target.reset();
+        } catch (error) { showToast(error.message, "error"); }
+    });
 
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            const guestNav = document.getElementById('guest-nav');
-            const authNav = document.getElementById('auth-nav');
-            const userDisplay = document.getElementById('user-display-email');
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        try {
+            await signOut(auth);
+            showToast("Logged out successfully.", "success");
+            showSection('home-section');
+        } catch (error) { showToast(error.message, "error"); }
+    });
 
-            if (user) {
-                guestNav.classList.add('hidden');
-                authNav.classList.remove('hidden');
-                userDisplay.textContent = user.email;
-                listenToUserOrders(user.uid);
-            } else {
-                guestNav.classList.remove('hidden');
-                authNav.classList.add('hidden');
-                userDisplay.textContent = '';
-                if (unsubscribeOrders) { unsubscribeOrders(); unsubscribeOrders = null; }
-                document.getElementById('orders-container').innerHTML = '';
-            }
-        });
+    onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        const guestNav = document.getElementById('guest-nav');
+        const authNav = document.getElementById('auth-nav');
+        const userDisplay = document.getElementById('user-display-email');
 
-        // --- LOCAL SHOPPING CART SYSTEM MANAGEMENT ---
-
-        window.toggleCartDrawer = function(open) {
-            const drawer = document.getElementById('cart-drawer');
-            if(open) drawer.classList.remove('hidden');
-            else drawer.classList.add('hidden');
-        };
-
-        window.addToCart = function(name, price) {
-            const existingItem = cart.find(item => item.name === name);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({ name, price, quantity: 1 });
-            }
-            updateCartUI();
-            showToast(`Added ${name} piece to cart!`, "success");
-        };
-
-        window.updateCartQuantity = function(name, delta) {
-            const item = cart.find(item => item.name === name);
-            if (!item) return;
-            item.quantity += delta;
-            if (item.quantity <= 0) {
-                cart = cart.filter(i => i.name !== name);
-            }
-            updateCartUI();
-        };
-
-        function updateCartUI() {
-            const listContainer = document.getElementById('cart-items-list');
-            const badge = document.getElementById('cart-badge');
-            const subtotalElement = document.getElementById('cart-subtotal');
-            
-            listContainer.innerHTML = '';
-            let totalItems = 0;
-            let grandTotal = 0;
-
-            cart.forEach(item => {
-                totalItems += item.quantity;
-                grandTotal += item.price * item.quantity;
-
-                const itemRow = document.createElement('div');
-                itemRow.className = "flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100";
-                itemRow.innerHTML = `
-                    <div>
-                        <h4 class="font-bold text-gray-800">${item.name}</h4>
-                        <p class="text-xs text-gray-500">$${item.price.toFixed(2)} / piece</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="updateCartQuantity('${item.name}', -1)" class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-sm text-sm font-bold cursor-pointer">-</button>
-                        <span class="font-semibold text-gray-800 text-sm">${item.quantity}</span>
-                        <button onclick="updateCartQuantity('${item.name}', 1)" class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-sm text-sm font-bold cursor-pointer">+</button>
-                    </div>
-                `;
-                listContainer.appendChild(itemRow);
-            });
-
-            subtotalElement.textContent = `$${grandTotal.toFixed(2)}`;
-            if (totalItems > 0) {
-                badge.textContent = totalItems;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-                listContainer.innerHTML = `<p class="text-center text-gray-400 py-8 text-sm">Your cart is completely empty.</p>`;
-            }
+        if (user) {
+            guestNav.classList.add('hidden');
+            authNav.classList.remove('hidden');
+            userDisplay.textContent = user.email;
+            listenToUserOrders(user.uid);
+        } else {
+            guestNav.classList.remove('hidden');
+            authNav.classList.add('hidden');
+            userDisplay.textContent = '';
+            if (unsubscribeOrders) { unsubscribeOrders(); unsubscribeOrders = null; }
+            document.getElementById('orders-container').innerHTML = '';
         }
+    });
 
-        // --- CHECKOUT & DATABASE SYNC ---
+    // --- LOCAL SHOPPING CART SYSTEM MANAGEMENT ---
 
-        window.openCheckoutModal = function() {
-            if (cart.length === 0) {
-                showToast("Your cart is empty! Add sweet cake slices first.", "error");
-                return;
-            }
-            if (!currentUser) {
-                showToast("You must sign in before accessing the checkout registry.", "error");
-                toggleCartDrawer(false);
-                showSection('login-section');
-                return;
-            }
-            
-            let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            document.getElementById('checkout-total-price').textContent = `$${total.toFixed(2)}`;
-            
-            toggleCartDrawer(false);
-            document.getElementById('checkout-modal').classList.remove('hidden');
-            document.getElementById('checkout-modal').classList.add('flex');
-        };
+    window.toggleCartDrawer = function(open) {
+        const drawer = document.getElementById('cart-drawer');
+        if(open) drawer.classList.remove('hidden');
+        else drawer.classList.add('hidden');
+    };
 
-        window.closeCheckoutModal = function() {
-            document.getElementById('checkout-modal').classList.add('hidden');
-            document.getElementById('checkout-modal').classList.remove('flex');
-        };
+    window.addToCart = function(name, price) {
+        const existingItem = cart.find(item => item.name === name);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ name, price, quantity: 1 });
+        }
+        updateCartUI();
+        showToast(`Added ${name} piece to cart!`, "success");
+    };
 
-        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!currentUser || cart.length === 0) return;
+    window.updateCartQuantity = function(name, delta) {
+        const item = cart.find(item => item.name === name);
+        if (!item) return;
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+            cart = cart.filter(i => i.name !== name);
+        }
+        updateCartUI();
+    };
 
-            const customerName = document.getElementById('order-customer-name').value;
-            const globalMessage = document.getElementById('order-message').value;
+    function updateCartUI() {
+        const listContainer = document.getElementById('cart-items-list');
+        const badge = document.getElementById('cart-badge');
+        const subtotalElement = document.getElementById('cart-subtotal');
+        
+        listContainer.innerHTML = '';
+        let totalItems = 0;
+        let grandTotal = 0;
 
-            try {
-                // Iterates over all cart item types and adds them as specified fields 
-                // containing: userId, userEmail, customerName, productName, quantity, price, message, and orderDate.
-                for (const item of cart) {
-                    await addDoc(collection(db, "orders"), {
-                        userId: currentUser.uid,
-                        userEmail: currentUser.email,
-                        customerName: customerName,
-                        productName: item.name,
-                        quantity: item.quantity,
-                        price: item.price,
-                        message: globalMessage,
-                        orderDate: new Date()
-                    });
-                }
+        cart.forEach(item => {
+            totalItems += item.quantity;
+            grandTotal += item.price * item.quantity;
 
-                showToast("Bakery receipt generated successfully! Your order is placed.", "success");
-                cart = [];
-                updateCartUI();
-                closeCheckoutModal();
-                showSection('orders-section');
-                e.target.reset();
-            } catch (error) {
-                showToast("Failed to write to database: " + error.message, "error");
-            }
+            const itemRow = document.createElement('div');
+            itemRow.className = "flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100";
+            itemRow.innerHTML = `
+                <div>
+                    <h4 class="font-bold text-gray-800">${item.name}</h4>
+                    <p class="text-xs text-gray-500">$${item.price.toFixed(2)} / piece</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="updateCartQuantity('${item.name}', -1)" class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-sm text-sm font-bold cursor-pointer">-</button>
+                    <span class="font-semibold text-gray-800 text-sm">${item.quantity}</span>
+                    <button onclick="updateCartQuantity('${item.name}', 1)" class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-sm text-sm font-bold cursor-pointer">+</button>
+                </div>
+            `;
+            listContainer.appendChild(itemRow);
         });
 
-        // --- REAL-TIME RETRIEVAL STREAM ---
+        subtotalElement.textContent = `$${grandTotal.toFixed(2)}`;
+        if (totalItems > 0) {
+            badge.textContent = totalItems;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+            listContainer.innerHTML = `<p class="text-center text-gray-400 py-8 text-sm">Your cart is completely empty.</p>`;
+        }
+    }
 
-        function listenToUserOrders(userId) {
-            const ordersLoading = document.getElementById('orders-loading');
-            const ordersEmpty = document.getElementById('orders-empty');
-            const ordersContainer = document.getElementById('orders-container');
+    // --- CHECKOUT, DATABASE SYNC & AUTOREPLY EMAIL ---
 
-            ordersLoading.classList.remove('hidden');
-            ordersEmpty.classList.add('hidden');
+    window.openCheckoutModal = function() {
+        if (cart.length === 0) {
+            showToast("Your cart is empty! Add sweet cake slices first.", "error");
+            return;
+        }
+        if (!currentUser) {
+            showToast("You must sign in before accessing the checkout registry.", "error");
+            toggleCartDrawer(false);
+            showSection('login-section');
+            return;
+        }
+        
+        let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        document.getElementById('checkout-total-price').textContent = `$${total.toFixed(2)}`;
+        
+        toggleCartDrawer(false);
+        document.getElementById('checkout-modal').classList.remove('hidden');
+        document.getElementById('checkout-modal').classList.add('flex');
+    };
 
-            const q = query(
-                collection(db, "orders"),
-                where("userId", "==", userId),
-                orderBy("orderDate", "desc")
+    window.closeCheckoutModal = function() {
+        document.getElementById('checkout-modal').classList.add('hidden');
+        document.getElementById('checkout-modal').classList.remove('flex');
+    };
+
+    document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentUser || cart.length === 0) return;
+
+        const customerName = document.getElementById('order-customer-name').value;
+        const globalMessage = document.getElementById('order-message').value;
+
+        // Calculate total summary variables for the auto-reply template string
+        let totalCost = 0;
+        let itemizedDetails = cart.map(item => {
+            totalCost += (item.price * item.quantity);
+            return `${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`;
+        }).join(", ");
+
+        try {
+            // 1. Store orders data securely inside Firestore
+            for (const item of cart) {
+                await addDoc(collection(db, "orders"), {
+                    userId: currentUser.uid,
+                    userEmail: currentUser.email,
+                    customerName: customerName,
+                    productName: item.name,
+                    quantity: item.quantity,
+                    price: item.price,
+                    message: globalMessage,
+                    orderDate: new Date()
+                });
+            }
+
+            // 2. Dispatch auto-reply confirmation via EmailJS
+            // Replace "YOUR_EMAILJS_SERVICE_ID" and "YOUR_EMAILJS_PUBLIC_KEY" with your values
+            await emailjs.send(
+                "YOUR_EMAILJS_SERVICE_ID", 
+                "template_f4lnbko", 
+                {
+                    customer_name: customerName,
+                    customer_email: currentUser.email,
+                    order_summary: itemizedDetails,
+                    total_price: `$${totalCost.toFixed(2)}`,
+                    delivery_notes: globalMessage || "None"
+                },
+                "YOUR_EMAILJS_PUBLIC_KEY"
             );
 
-            unsubscribeOrders = onSnapshot(q, (snapshot) => {
-                ordersLoading.classList.add('hidden');
-                ordersContainer.innerHTML = '';
-
-                if (snapshot.empty) {
-                    ordersEmpty.classList.remove('hidden');
-                    return;
-                }
-
-                ordersEmpty.classList.add('hidden');
-                snapshot.forEach((doc) => {
-                    const order = doc.data();
-                    const formattedDate = order.orderDate ? new Date(order.orderDate.seconds * 1000).toLocaleString() : 'Processing...';
-                    const calculatedTotal = (order.price * order.quantity).toFixed(2);
-
-                    const orderElement = document.createElement('div');
-                    orderElement.className = "bg-white p-6 rounded-xl border border-amber-100 shadow-xs flex flex-col md:flex-row justify-between md:items-center gap-4";
-                    orderElement.innerHTML = `
-                        <div>
-                            <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-xs uppercase bg-amber-50 font-bold text-amber-600 px-2.5 py-1 rounded-sm">ID: #${doc.id.substring(0,6)}</span>
-                                <span class="text-xs text-gray-400">${formattedDate}</span>
-                            </div>
-                            <h4 class="text-lg font-bold text-gray-800">${order.productName} <span class="text-gray-400 font-normal">x${order.quantity}</span></h4>
-                            <p class="text-sm text-gray-600 mt-1"><span class="font-medium text-gray-700">Recipient:</span> ${order.customerName}</p>
-                            ${order.message ? `<p class="text-xs italic bg-amber-50/50 text-gray-500 p-2 rounded mt-2 border-l-2 border-amber-300">" ${order.message} "</p>` : ''}
-                        </div>
-                        <div class="text-right flex md:flex-col justify-between items-center md:items-end border-t md:border-0 pt-3 md:pt-0 border-gray-100">
-                            <span class="text-sm text-gray-500">Item Cost Summary</span>
-                            <span class="text-xl font-black text-amber-600">$${calculatedTotal}</span>
-                        </div>
-                    `;
-                    ordersContainer.appendChild(orderElement);
-                });
-            }, (error) => {
-                console.error("Error structural fetching: ", error);
-                ordersLoading.classList.add('hidden');
-            });
+            showToast("Order placed & confirmation email sent!", "success");
+            cart = [];
+            updateCartUI();
+            closeCheckoutModal();
+            showSection('orders-section');
+            e.target.reset();
+        } catch (error) {
+            showToast("Process Error: " + error.message, "error");
         }
+    });
 
-        // --- SECTION ROUTER SWITCHER ---
+    // --- REAL-TIME RETRIEVAL STREAM ---
 
-        window.showSection = function(sectionId) {
-            document.querySelectorAll('.page-section').forEach(section => {
-                section.classList.add('hidden');
-            });
-            document.getElementById(sectionId).classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
+    function listenToUserOrders(userId) {
+        const ordersLoading = document.getElementById('orders-loading');
+        const ordersEmpty = document.getElementById('orders-empty');
+        const ordersContainer = document.getElementById('orders-container');
 
-        function showToast(message, type = "success") {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            if (type === "success") {
-                toast.className = "fixed bottom-5 right-5 bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 z-50 transform translate-y-0";
-            } else {
-                toast.className = "fixed bottom-5 right-5 bg-rose-600 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 z-50 transform translate-y-0";
+        ordersLoading.classList.remove('hidden');
+        ordersEmpty.classList.add('hidden');
+
+        const q = query(
+            collection(db, "orders"),
+            where("userId", "==", userId),
+            orderBy("orderDate", "desc")
+        );
+
+        unsubscribeOrders = onSnapshot(q, (snapshot) => {
+            ordersLoading.classList.add('hidden');
+            ordersContainer.innerHTML = '';
+
+            if (snapshot.empty) {
+                ordersEmpty.classList.remove('hidden');
+                return;
             }
-            setTimeout(() => {
-                toast.classList.add('translate-y-10', 'opacity-0');
-                setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('opacity-0'); }, 300);
-            }, 4000);
-            toast.classList.remove('hidden');
-        }
-    </script>
+
+            ordersEmpty.classList.add('hidden');
+            snapshot.forEach((doc) => {
+                const order = doc.data();
+                const formattedDate = order.orderDate ? new Date(order.orderDate.seconds * 1000).toLocaleString() : 'Processing...';
+                const calculatedTotal = (order.price * order.quantity).toFixed(2);
+
+                const orderElement = document.createElement('div');
+                orderElement.className = "bg-white p-6 rounded-xl border border-amber-100 shadow-xs flex flex-col md:flex-row justify-between md:items-center gap-4";
+                orderElement.innerHTML = `
+                    <div>
+                        <div class="flex items-center space-x-3 mb-1">
+                            <span class="text-xs uppercase bg-amber-50 font-bold text-amber-600 px-2.5 py-1 rounded-sm">ID: #${doc.id.substring(0,6)}</span>
+                            <span class="text-xs text-gray-400">${formattedDate}</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-800">${order.productName} <span class="text-gray-400 font-normal">x${order.quantity}</span></h4>
 </body>
 </html>
