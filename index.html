@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delicious Cake🍰</title>
+    <title>Wonderful Cake Store🍰</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         [v-cloak] { display: none; }
         .auth-hidden { display: none; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-amber-50/40 text-gray-800 font-sans">
 
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-amber-100">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="#" onclick="showSection('home-section')" class="text-2xl font-bold text-indigo-600 tracking-tight">QuickShop</a>
+            <a href="#" onclick="showSection('home-section')" class="text-2xl font-black text-amber-600 tracking-tight">Wonderful Cake Store</a>
             <div class="flex items-center space-x-4">
-                <button onclick="showSection('home-section')" class="hover:text-indigo-600 font-medium cursor-pointer">Products</button>
+                <button onclick="showSection('home-section')" class="hover:text-amber-600 font-medium cursor-pointer">Our Cakes</button>
                 
                 <div id="guest-nav" class="flex space-x-4">
-                    <button onclick="showSection('login-section')" class="hover:text-indigo-600 font-medium cursor-pointer">Login</button>
-                    <button onclick="showSection('signup-section')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition cursor-pointer">Sign Up</button>
+                    <button onclick="showSection('login-section')" class="hover:text-amber-600 font-medium cursor-pointer">Login</button>
+                    <button onclick="showSection('signup-section')" class="bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition cursor-pointer">Sign Up</button>
                 </div>
 
                 <div id="auth-nav" class="hidden flex items-center space-x-4">
-                    <button onclick="showSection('orders-section')" class="hover:text-indigo-600 font-medium cursor-pointer">My Orders</button>
-                    <span id="user-display-email" class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full"></span>
+                    <button onclick="showSection('orders-section')" class="hover:text-amber-600 font-medium cursor-pointer">My Orders</button>
+                    <span id="user-display-email" class="text-sm text-gray-500 bg-amber-50 px-3 py-1 rounded-full border border-amber-100"></span>
                     <button id="logout-btn" class="text-red-600 hover:text-red-700 font-medium cursor-pointer">Logout</button>
                 </div>
             </div>
@@ -38,88 +38,130 @@
 
         <section id="home-section" class="page-section">
             <div class="text-center my-12">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Discover Amazing Products</h1>
-                <p class="text-lg text-gray-600 max-w-xl mx-auto">Shop our curated collection of premium essentials with seamless checkout and fast delivery.</p>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Freshly Baked Happiness</h1>
+                <p class="text-lg text-gray-600 max-w-xl mx-auto">Discover our collection of premium, handcrafted cakes and pies made daily with love and fine ingredients.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-gray-100 flex flex-col">
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80" alt="Headphones" class="h-56 w-full object-cover">
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80" alt="Chocolate Cake" class="h-56 w-full object-cover">
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Premium Wireless Headphones</h3>
-                            <p class="text-gray-600 text-sm mb-4">Experience crystal-clear audio with hybrid active noise cancellation and 40-hour battery life.</p>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Chocolate Cake</h3>
+                            <p class="text-gray-600 text-sm mb-4">Rich, decadent layers of premium dark chocolate sponge smothered in silky smooth fudge frosting.</p>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <span class="text-2xl font-extrabold text-indigo-600">$199.99</span>
-                            <button onclick="openOrderModal('Premium Wireless Headphones', 199.99)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Buy Now</button>
+                            <span class="text-2xl font-extrabold text-amber-600">$60.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="openOrderModal('Chocolate Cake', 60.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Order Now</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-gray-100 flex flex-col">
-                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80" alt="Watch" class="h-56 w-full object-cover">
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1464305795204-6f5bdf7aff28?w=500&q=80" alt="Strawberry Cake" class="h-56 w-full object-cover">
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Minimalist Smart Watch</h3>
-                            <p class="text-gray-600 text-sm mb-4">Track your fitness, sleep, and notifications daily with a sleek, water-resistant timeless design.</p>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Strawberry Cake</h3>
+                            <p class="text-gray-600 text-sm mb-4">Light, airy vanilla sponge paired with sweet fresh berry layers and fresh whipped cream.</p>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <span class="text-2xl font-extrabold text-indigo-600">$149.50</span>
-                            <button onclick="openOrderModal('Minimalist Smart Watch', 149.50)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Buy Now</button>
+                            <span class="text-2xl font-extrabold text-amber-600">$60.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="openOrderModal('Strawberry Cake', 60.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Order Now</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-gray-100 flex flex-col">
-                    <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&q=80" alt="Microphone" class="h-56 w-full object-cover">
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1535141192574-5d4897c13636?w=500&q=80" alt="Vanilla Cake" class="h-56 w-full object-cover">
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Pro USB Studio Microphone</h3>
-                            <p class="text-gray-600 text-sm mb-4">Perfect for podcasting, streaming, and voice recordings with cardiod pickup and zero-latency monitoring.</p>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Vanilla Cake</h3>
+                            <p class="text-gray-600 text-sm mb-4">Elegant and classic Madagascar vanilla bean sponge cake topped with smooth buttercream.</p>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <span class="text-2xl font-extrabold text-indigo-600">$89.00</span>
-                            <button onclick="openOrderModal('Pro USB Studio Microphone', 89.00)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Buy Now</button>
+                            <span class="text-2xl font-extrabold text-amber-600">$60.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="openOrderModal('Vanilla Cake', 60.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=500&q=80" alt="Banana Cake" class="h-56 w-full object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Banana Cake</h3>
+                            <p class="text-gray-600 text-sm mb-4">Moist banana infused sponge spiced with a trace of cinnamon and coated in sweet icing cream.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-2xl font-extrabold text-amber-600">$60.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="openOrderModal('Banana Cake', 60.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1519869325930-281384150729?w=500&q=80" alt="Apple Pie" class="h-56 w-full object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Apple Pie</h3>
+                            <p class="text-gray-600 text-sm mb-4">Crispy, golden lattice crust filled with spiced warm cinnamon apples baked to amber perfection.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-2xl font-extrabold text-amber-600">$40.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="openOrderModal('Apple Pie', 40.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1524351199679-46cddf530c04?w=500&q=80" alt="Cheese Cake" class="h-56 w-full object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Cheese Cake</h3>
+                            <p class="text-gray-600 text-sm mb-4">Velvety-smooth and rich baked New York style cheesecake over a buttery graham cracker crust.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-2xl font-extrabold text-amber-600">$60.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="openOrderModal('Cheese Cake', 60.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Order Now</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="login-section" class="page-section hidden max-w-md mx-auto my-12 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+        <section id="login-section" class="page-section hidden max-w-md mx-auto my-12 bg-white p-8 rounded-xl shadow-md border border-amber-100">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-900">Login to Your Account</h2>
             <form id="login-form" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" id="login-email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    <input type="email" id="login-email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                    <input type="password" id="login-password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    <input type="password" id="login-password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none">
                 </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-semibold transition cursor-pointer">Login</button>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-lg font-semibold transition cursor-pointer">Login</button>
             </form>
             <p class="mt-4 text-center text-sm text-gray-600">
-                Don't have an account? <a href="#" onclick="showSection('signup-section')" class="text-indigo-600 font-medium hover:underline">Sign up</a>
+                Don't have an account? <a href="#" onclick="showSection('signup-section')" class="text-amber-600 font-medium hover:underline">Sign up</a>
             </p>
         </section>
 
-        <section id="signup-section" class="page-section hidden max-w-md mx-auto my-12 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+        <section id="signup-section" class="page-section hidden max-w-md mx-auto my-12 bg-white p-8 rounded-xl shadow-md border border-amber-100">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-900">Create an Account</h2>
             <form id="signup-form" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" id="signup-email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    <input type="email" id="signup-email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                    <input type="password" id="signup-password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" placeholder="Min. 6 characters">
+                    <input type="password" id="signup-password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" placeholder="Min. 6 characters">
                 </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-semibold transition cursor-pointer">Sign Up</button>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-lg font-semibold transition cursor-pointer">Sign Up</button>
             </form>
             <p class="mt-4 text-center text-sm text-gray-600">
-                Already have an account? <a href="#" onclick="showSection('login-section')" class="text-indigo-600 font-medium hover:underline">Login</a>
+                Already have an account? <a href="#" onclick="showSection('login-section')" class="text-amber-600 font-medium hover:underline">Login</a>
             </p>
         </section>
 
@@ -131,35 +173,35 @@
                 <p class="text-sm text-gray-500 mb-6">Review your item details and complete your checkout information.</p>
                 
                 <form id="order-form" class="space-y-4">
-                    <div class="bg-indigo-50 p-4 rounded-lg flex justify-between items-center">
+                    <div class="bg-amber-50 p-4 rounded-lg flex justify-between items-center border border-amber-100">
                         <div>
-                            <span class="block text-xs font-semibold uppercase text-indigo-600 tracking-wider">Product</span>
+                            <span class="block text-xs font-semibold uppercase text-amber-600 tracking-wider">Cake Selected</span>
                             <span id="order-product-name" class="font-bold text-gray-800 text-lg"></span>
                         </div>
                         <div class="text-right">
-                            <span class="block text-xs font-semibold uppercase text-indigo-600 tracking-wider">Unit Price</span>
+                            <span class="block text-xs font-semibold uppercase text-amber-600 tracking-wider">Unit Price</span>
                             <span id="order-product-price" class="font-bold text-gray-800 text-lg"></span>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                        <input type="text" id="order-customer-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                        <input type="text" id="order-customer-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                        <input type="number" id="order-quantity" value="1" min="1" max="10" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Quantity (Pieces)</label>
+                        <input type="number" id="order-quantity" value="1" min="1" max="10" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Order Notes / Message</label>
-                        <textarea id="order-message" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" placeholder="Special delivery instructions..."></textarea>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Order Notes / Writing on Cake</label>
+                        <textarea id="order-message" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" placeholder="Special delivery instructions or custom cake messages..."></textarea>
                     </div>
 
                     <div class="pt-2 border-t border-gray-100 flex justify-between items-center">
                         <span class="text-gray-600 font-medium">Estimated Total:</span>
-                        <span id="order-total-price" class="text-2xl font-extrabold text-gray-900"></span>
+                        <span id="order-total-price" class="text-2xl font-extrabold text-amber-600"></span>
                     </div>
 
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-bold transition shadow-md mt-4 cursor-pointer">Confirm & Place Order</button>
@@ -174,13 +216,13 @@
             </div>
 
             <div id="orders-loading" class="text-center py-12 hidden">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent"></div>
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-amber-500 border-t-transparent"></div>
                 <p class="text-gray-500 mt-2">Loading your receipts...</p>
             </div>
 
-            <div id="orders-empty" class="text-center py-16 bg-white rounded-xl border border-dashed border-gray-200 hidden">
-                <p class="text-gray-500 text-lg mb-4">You haven't placed any orders yet!</p>
-                <button onclick="showSection('home-section')" class="bg-indigo-600 text-white px-5 py-2 rounded-lg font-semibold shadow-xs hover:bg-indigo-700 cursor-pointer">Browse Products</button>
+            <div id="orders-empty" class="text-center py-16 bg-white rounded-xl border border-dashed border-amber-200 hidden">
+                <p class="text-gray-500 text-lg mb-4">You haven't ordered any cakes yet!</p>
+                <button onclick="showSection('home-section')" class="bg-amber-500 text-white px-5 py-2 rounded-lg font-semibold shadow-xs hover:bg-amber-600 cursor-pointer">Browse Cakes</button>
             </div>
 
             <div id="orders-container" class="space-y-4"></div>
@@ -188,37 +230,33 @@
 
     </main>
 
-    <footer class="bg-white border-t border-gray-100 py-6 mt-12 text-center text-sm text-gray-500">
-        &copy; 2026 QuickShop. All rights reserved. Powered by Firebase Cloud Architecture.
+    <footer class="bg-white border-t border-amber-100 py-6 mt-12 text-center text-sm text-gray-500">
+        &copy; 2026 Wonderful Cake Store. All rights reserved. Powered by Firebase Cloud Architecture.
     </footer>
 
     <script type="module">
-        // Import Firebase application SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // IMPORTANT: Replace this config object with your own Firebase Console details.
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDkDy5XLn_toPfgQj30xKIFYXQlWOBqr8s",
-  authDomain: "online-store-a8ab2.firebaseapp.com",
-  projectId: "online-store-a8ab2",
-  storageBucket: "online-store-a8ab2.firebasestorage.app",
-  messagingSenderId: "600976274861",
-  appId: "1:600976274861:web:239035afed61f2c5b6dd24",
-  measurementId: "G-7W1N8KP344"
-};
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Global State Variables
         let currentUser = null;
         let selectedProduct = { name: '', price: 0 };
-        let unsubscribeOrders = null; // To handle real-time database listener cleanups
+        let unsubscribeOrders = null;
 
         // --- AUTHENTICATION FLOWS ---
 
@@ -230,7 +268,7 @@ const firebaseConfig = {
 
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
-                showToast("Account created successfully! Welcome to QuickShop.", "success");
+                showToast("Account created successfully! Welcome to Wonderful Cake Store.", "success");
                 showSection('home-section');
                 e.target.reset();
             } catch (error) {
@@ -273,18 +311,14 @@ const firebaseConfig = {
             const userDisplay = document.getElementById('user-display-email');
 
             if (user) {
-                // User logged in
                 guestNav.classList.add('hidden');
                 authNav.classList.remove('hidden');
                 userDisplay.textContent = user.email;
-                // Hook up database dynamic sync for this specific user
                 listenToUserOrders(user.uid);
             } else {
-                // User logged out
                 guestNav.classList.remove('hidden');
                 authNav.classList.add('hidden');
                 userDisplay.textContent = '';
-                // Detach database streaming listeners to optimize resource usage
                 if (unsubscribeOrders) {
                     unsubscribeOrders();
                     unsubscribeOrders = null;
@@ -296,7 +330,6 @@ const firebaseConfig = {
 
         // --- FIRESTORE ORDER MANAGEMENT ---
 
-        // Listen for user orders in real-time
         function listenToUserOrders(userId) {
             const ordersLoading = document.getElementById('orders-loading');
             const ordersEmpty = document.getElementById('orders-empty');
@@ -305,14 +338,12 @@ const firebaseConfig = {
             ordersLoading.classList.remove('hidden');
             ordersEmpty.classList.add('hidden');
 
-            // Formulate query targeting specific authenticated customer ID
             const q = query(
                 collection(db, "orders"),
                 where("userId", "==", userId),
                 orderBy("orderDate", "desc")
             );
 
-            // Execute active sync stream snapshot
             unsubscribeOrders = onSnapshot(q, (snapshot) => {
                 ordersLoading.classList.add('hidden');
                 ordersContainer.innerHTML = '';
@@ -329,20 +360,20 @@ const firebaseConfig = {
                     const calculatedTotal = (order.price * order.quantity).toFixed(2);
 
                     const orderElement = document.createElement('div');
-                    orderElement.className = "bg-white p-6 rounded-xl border border-gray-100 shadow-xs flex flex-col md:flex-row justify-between md:items-center gap-4";
+                    orderElement.className = "bg-white p-6 rounded-xl border border-amber-100 shadow-xs flex flex-col md:flex-row justify-between md:items-center gap-4";
                     orderElement.innerHTML = `
                         <div>
                             <div class="flex items-center space-x-3 mb-1">
-                                <span class="text-xs uppercase bg-indigo-50 font-bold text-indigo-600 px-2.5 py-1 rounded-sm">Order ID: #${doc.id.substring(0,6)}</span>
+                                <span class="text-xs uppercase bg-amber-50 font-bold text-amber-600 px-2.5 py-1 rounded-sm">Order ID: #${doc.id.substring(0,6)}</span>
                                 <span class="text-xs text-gray-400">${formattedDate}</span>
                             </div>
                             <h4 class="text-lg font-bold text-gray-800">${order.productName} <span class="text-gray-400 font-normal">x${order.quantity}</span></h4>
-                            <p class="text-sm text-gray-600 mt-1"><span class="font-medium text-gray-700">Shipped To:</span> ${order.customerName}</p>
-                            ${order.message ? `<p class="text-xs italic bg-gray-50 text-gray-500 p-2 rounded mt-2 border-l-2 border-gray-300">" ${order.message} "</p>` : ''}
+                            <p class="text-sm text-gray-600 mt-1"><span class="font-medium text-gray-700">Customer:</span> ${order.customerName}</p>
+                            ${order.message ? `<p class="text-xs italic bg-amber-50/50 text-gray-500 p-2 rounded mt-2 border-l-2 border-amber-300">" ${order.message} "</p>` : ''}
                         </div>
                         <div class="text-right flex md:flex-col justify-between items-center md:items-end border-t md:border-0 pt-3 md:pt-0 border-gray-100">
                             <span class="text-sm text-gray-500">Total Price</span>
-                            <span class="text-xl font-black text-indigo-600">$${calculatedTotal}</span>
+                            <span class="text-xl font-black text-amber-600">$${calculatedTotal}</span>
                         </div>
                     `;
                     ordersContainer.appendChild(orderElement);
@@ -353,7 +384,6 @@ const firebaseConfig = {
             });
         }
 
-        // Handle Order Placement Submission
         document.getElementById('order-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -373,7 +403,7 @@ const firebaseConfig = {
                 quantity: quantity,
                 price: selectedProduct.price,
                 message: document.getElementById('order-message').value,
-                orderDate: new Date() // Firebase SDK converts this natively to a Timestamp
+                orderDate: new Date()
             };
 
             try {
@@ -389,7 +419,6 @@ const firebaseConfig = {
 
         // --- APPLICATION WINDOW INTERACTION ROUTERS ---
 
-        // View Navigation Switcher Helper
         window.showSection = function(sectionId) {
             document.querySelectorAll('.page-section').forEach(section => {
                 section.classList.add('hidden');
@@ -398,10 +427,9 @@ const firebaseConfig = {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // Modal Open System
         window.openOrderModal = function(name, price) {
             if (!currentUser) {
-                showToast("You must lock in an account before making dynamic checkout queries.", "error");
+                showToast("You must sign in to an account before placing an order.", "error");
                 showSection('login-section');
                 return;
             }
@@ -411,20 +439,18 @@ const firebaseConfig = {
             document.getElementById('order-product-price').textContent = `$${price.toFixed(2)}`;
             
             const quantityInput = document.getElementById('order-quantity');
-            quantityInput.value = 1; // reset counter standard
+            quantityInput.value = 1;
             
             updateOrderModalTotal();
             document.getElementById('order-modal-section').classList.remove('hidden');
             document.getElementById('order-modal-section').classList.add('flex');
         };
 
-        // Modal Close System
         window.closeOrderModal = function() {
             document.getElementById('order-modal-section').classList.add('hidden');
             document.getElementById('order-modal-section').classList.remove('flex');
         };
 
-        // Live Modal Total Price Calculator
         function updateOrderModalTotal() {
             const quantity = parseInt(document.getElementById('order-quantity').value) || 1;
             const total = selectedProduct.price * quantity;
@@ -433,7 +459,6 @@ const firebaseConfig = {
         
         document.getElementById('order-quantity').addEventListener('input', updateOrderModalTotal);
 
-        // Feedback Notice System
         function showToast(message, type = "success") {
             const toast = document.getElementById('toast');
             toast.textContent = message;
