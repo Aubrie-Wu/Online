@@ -67,10 +67,11 @@
         <section id="home-section" class="page-section">
             <div class="text-center my-12">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Freshly Baked Happiness</h1>
-                <p class="text-lg text-gray-600 max-w-xl mx-auto">Discover our collection of premium, handcrafted cakes and pies made daily with love and fine ingredients.</p>
+                <p class="text-lg text-gray-600 max-w-xl mx-auto">Discover our expanded collection of premium, handcrafted cakes and pies made daily with love and fine ingredients.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                
                 <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
                     <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&auto=format&fit=crop&q=80" alt="Chocolate Cake" class="h-56 w-full object-cover">
                     <div class="p-6 flex-1 flex flex-col justify-between">
@@ -112,6 +113,49 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1536680465769-a369695f76ff?w=600&auto=format&fit=crop&q=80" alt="Matcha Crepe Cake" class="h-56 w-full object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Matcha Crepe Cake</h3>
+                            <p class="text-gray-600 text-sm mb-4">Twenty layers of paper-thin green tea crepes stacked perfectly with light Uji matcha pastry cream.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-2xl font-extrabold text-amber-600">$65.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="addToCart('Matcha Crepe Cake', 65.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=600&auto=format&fit=crop&q=80" alt="Red Velvet Cake" class="h-56 w-full object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Red Velvet Cake</h3>
+                            <p class="text-gray-600 text-sm mb-4">A striking crimson cake with a hint of cocoa, beautifully frosted in velvety vanilla cream cheese.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-2xl font-extrabold text-amber-600">$62.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="addToCart('Red Velvet Cake', 62.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1519869325930-281384150729?w=600&auto=format&fit=crop&q=80" alt="Lemon Blueberry Pie" class="h-56 w-full object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Lemon Blueberry Pie</h3>
+                            <p class="text-gray-600 text-sm mb-4">Flaky, buttery lattice crust packed bursting with sweet blueberries and zesty, refreshing lemon curd.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-2xl font-extrabold text-amber-600">$55.00 <span class="text-xs font-normal text-gray-400">/ piece</span></span>
+                            <button onclick="addToCart('Lemon Blueberry Pie', 55.00)" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition cursor-pointer">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -198,6 +242,7 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDkDy5XLn_toPfgQj30xKIFYXQlWOBqr8s",
             authDomain: "online-store-a8ab2.firebaseapp.com",
@@ -208,6 +253,7 @@
             measurementId: "G-7W1N8KP344"
         };
 
+        // Initialize EmailJS with your active public key
         emailjs.init({
           publicKey: "8sEhRUUeC2zt1fQtC", 
         });
@@ -220,6 +266,7 @@
         let cart = []; 
         let unsubscribeOrders = null;
 
+        // --- AUTH FLOWS ---
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('signup-email').value;
@@ -272,6 +319,7 @@
             }
         });
 
+        // --- CART FLOWS ---
         window.toggleCartDrawer = function(open) {
             const drawer = document.getElementById('cart-drawer');
             if(open) drawer.classList.remove('hidden');
@@ -363,6 +411,7 @@
             document.getElementById('checkout-modal').classList.remove('flex');
         };
 
+        // --- CHECKOUT & EMAIL LOGIC ---
         document.getElementById('checkout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser || cart.length === 0) return;
@@ -398,7 +447,7 @@
                     delivery_notes: globalMessage || "None"
                 };
 
-                // Your Service ID is placed right here automatically!
+                // Triggers via your newly authenticated Gmail service
                 await emailjs.send("service_w93yhgq", "template_f4lnbko", emailParams);
 
                 showToast("Bakery receipt generated and confirmation email sent!", "success");
@@ -412,6 +461,7 @@
             }
         });
 
+        // --- ORDER HISTORY HOOKS ---
         function listenToUserOrders(userId) {
             const ordersLoading = document.getElementById('orders-loading');
             const ordersEmpty = document.getElementById('orders-empty');
