@@ -275,7 +275,7 @@
                 showToast("Account created! Welcome to Wonderful Cake Store.", "success");
                 showSection('home-section');
                 e.target.reset();
-            } catch (error) { showToast(error.message, "error"); }
+            } catch (error) { showToast(error.message || "Sign up configuration mismatch.", "error"); }
         });
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -287,7 +287,7 @@
                 showToast("Logged in successfully. Happy shopping!", "success");
                 showSection('home-section');
                 e.target.reset();
-            } catch (error) { showToast(error.message, "error"); }
+            } catch (error) { showToast(error.message || "Invalid authentication credentials.", "error"); }
         });
 
         document.getElementById('logout-btn').addEventListener('click', async () => {
@@ -295,7 +295,7 @@
                 await signOut(auth);
                 showToast("Logged out successfully.", "success");
                 showSection('home-section');
-            } catch (error) { showToast(error.message, "error"); }
+            } catch (error) { showToast(error.message || "Logout tracking failed.", "error"); }
         });
 
         onAuthStateChanged(auth, (user) => {
@@ -436,24 +436,28 @@
                     });
                 }
 
-                const emailParams = {
-                    to_email: currentUser.email,
-                    customer_name: customerName,
-                    cart_items: itemsSummaryText,
-                    grand_total: `$${total.toFixed(2)}`,
-                    delivery_notes: globalMessage || "None"
-                };
+                try {
+                    const emailParams = {
+                        to_email: currentUser.email,
+                        customer_name: customerName,
+                        cart_items: itemsSummaryText,
+                        grand_total: `$${total.toFixed(2)}`,
+                        delivery_notes: globalMessage || "None"
+                    };
+                    await emailjs.send("service_7mn9pgj", "template_f4lnbko", emailParams);
+                    showToast("Order logged and email confirmation receipt sent successfully!", "success");
+                } catch (emailError) {
+                    console.error("EmailJS sending error: ", emailError);
+                    showToast("Order database entry created successfully, but receipt delivery failed. Check EmailJS Google credentials.", "error");
+                }
 
-                await emailjs.send("service_w93yhgq", "template_f4lnbko", emailParams);
-
-                showToast("Bakery receipt generated and confirmation email sent!", "success");
                 cart = [];
                 updateCartUI();
                 closeCheckoutModal();
                 showSection('orders-section');
                 e.target.reset();
             } catch (error) {
-                showToast("An error occurred: " + error.message, "error");
+                showToast("Firebase Storage Failure: " + (error.message || "Unknown db sync error"), "error");
             }
         });
 
