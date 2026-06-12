@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wonderful Cake Store</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         [v-cloak] { display: none; }
     </style>
@@ -197,8 +198,6 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // !!! CRITICAL !!! 
-        // PASTE YOUR ENTIRE REPLACED CONFIG OBJECT HERE:
         const firebaseConfig = {
             apiKey: "AIzaSyDkDy5XLn_toPfgQj30xKIFYXQlWOBqr8s",
             authDomain: "online-store-a8ab2.firebaseapp.com",
@@ -209,17 +208,17 @@
             measurementId: "G-7W1N8KP344"
         };
 
-        // Initialize Firebase
+        emailjs.init({
+          publicKey: "8sEhRUUeC2zt1fQtC", 
+        });
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Global States
         let currentUser = null;
         let cart = []; 
         let unsubscribeOrders = null;
-
-        // --- AUTHENTICATION FLOWS ---
 
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -272,8 +271,6 @@
                 document.getElementById('orders-container').innerHTML = '';
             }
         });
-
-        // --- SHOPPING CART MANAGEMENT ---
 
         window.toggleCartDrawer = function(open) {
             const drawer = document.getElementById('cart-drawer');
@@ -341,8 +338,6 @@
             }
         }
 
-        // --- CHECKOUT ---
-
         window.openCheckoutModal = function() {
             if (cart.length === 0) {
                 showToast("Your cart is empty! Add sweet cake slices first.", "error");
@@ -376,7 +371,13 @@
             const globalMessage = document.getElementById('order-message').value;
 
             try {
+                let total = 0;
+                let itemsSummaryText = "";
+
                 for (const item of cart) {
+                    total += item.price * item.quantity;
+                    itemsSummaryText += `- ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}\n`;
+
                     await addDoc(collection(db, "orders"), {
                         userId: currentUser.uid,
                         userEmail: currentUser.email,
@@ -389,18 +390,27 @@
                     });
                 }
 
-                showToast("Bakery receipt generated successfully! Your order is placed.", "success");
+                const emailParams = {
+                    to_email: currentUser.email,
+                    customer_name: customerName,
+                    cart_items: itemsSummaryText,
+                    grand_total: `$${total.toFixed(2)}`,
+                    delivery_notes: globalMessage || "None"
+                };
+
+                // Your Service ID is placed right here automatically!
+                await emailjs.send("service_w93yhgq", "template_f4lnbko", emailParams);
+
+                showToast("Bakery receipt generated and confirmation email sent!", "success");
                 cart = [];
                 updateCartUI();
                 closeCheckoutModal();
                 showSection('orders-section');
                 e.target.reset();
             } catch (error) {
-                showToast("Failed to write to database: " + error.message, "error");
+                showToast("An error occurred: " + error.message, "error");
             }
         });
-
-        // --- REAL-TIME RETRIEVAL STREAM ---
 
         function listenToUserOrders(userId) {
             const ordersLoading = document.getElementById('orders-loading');
@@ -455,8 +465,6 @@
                 ordersLoading.classList.add('hidden');
             });
         }
-
-        // --- SECTION ROUTER SWITCHER ---
 
         window.showSection = function(sectionId) {
             document.querySelectorAll('.page-section').forEach(section => {
