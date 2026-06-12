@@ -72,8 +72,6 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
                 
-               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-                
                 <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-amber-100 flex flex-col">
                     <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&auto=format&fit=crop&q=80" alt="Chocolate Cake" class="h-56 w-full object-cover">
                     <div class="p-6 flex-1 flex flex-col justify-between">
@@ -159,6 +157,7 @@
                 </div>
 
             </div>
+        </section>
 
         <section id="login-section" class="page-section hidden max-w-md mx-auto my-12 bg-white p-8 rounded-xl shadow-md border border-amber-100">
             <h2 class="text-2xl font-bold mb-2 text-center text-gray-900">Login to Your Account</h2>
@@ -254,7 +253,7 @@
             measurementId: "G-7W1N8KP344"
         };
 
-        // Initialize EmailJS with your active public key
+        // Initialize EmailJS
         emailjs.init({
           publicKey: "8sEhRUUeC2zt1fQtC", 
         });
@@ -267,7 +266,6 @@
         let cart = []; 
         let unsubscribeOrders = null;
 
-        // --- AUTH FLOWS ---
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('signup-email').value;
@@ -320,7 +318,6 @@
             }
         });
 
-        // --- CART FLOWS ---
         window.toggleCartDrawer = function(open) {
             const drawer = document.getElementById('cart-drawer');
             if(open) drawer.classList.remove('hidden');
@@ -412,7 +409,6 @@
             document.getElementById('checkout-modal').classList.remove('flex');
         };
 
-        // --- CHECKOUT & EMAIL LOGIC ---
         document.getElementById('checkout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser || cart.length === 0) return;
@@ -448,7 +444,7 @@
                     delivery_notes: globalMessage || "None"
                 };
 
-                // Triggers via your newly authenticated Gmail service
+                // Connected to your EmailJS account service ID
                 await emailjs.send("service_w93yhgq", "template_f4lnbko", emailParams);
 
                 showToast("Bakery receipt generated and confirmation email sent!", "success");
@@ -462,7 +458,6 @@
             }
         });
 
-        // --- ORDER HISTORY HOOKS ---
         function listenToUserOrders(userId) {
             const ordersLoading = document.getElementById('orders-loading');
             const ordersEmpty = document.getElementById('orders-empty');
